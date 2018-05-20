@@ -87,7 +87,8 @@ void loop() {
       const char* weatherDescription = weather0["description"]; // "scattered clouds"
               
       JsonObject& main = root["main"];
-      float temp = main["temp"]; // 16.63
+      float preciseTemp = main["temp"]; // 16.63
+      int temp = (int) round(preciseTemp); // 17
       int pressure = main["pressure"]; // 1016
       int humidity = main["humidity"]; // 77
       int tempMin = main["temp_min"]; // 15
@@ -96,14 +97,13 @@ void loop() {
       const char* name = root["name"]; // "Tokyo"
 
       /*********** PARSING END *************/
-
       String space = " ";
       String returnChar = "\n";
-      String text1 = String(returnChar + name + space + weatherType + returnChar) ;
+      String text1 = String(returnChar + name + returnChar + weatherType) ;
 
       String tempLabel = String("\nTemp ");
       String text2 = String(tempLabel + temp + returnChar);
-     
+
       String pressureLabel = String("\nPressure\n\n");
       String text3 = String(pressureLabel + pressure + returnChar);
 
@@ -121,7 +121,7 @@ void loop() {
       int sizeOfMessages = sizeof(messages) / sizeof(messages[0]); // Only works when arrays are NOT pointers
 
       for (int i = 0; i < HOUR; i++) {
-        for (int z = 0; i < sizeOfMessages; z++) {
+        for (int z = 0; z < sizeOfMessages; z++) {
           displayText(messages[z], 2, true);
           delay(SECOND * 10);  
         }
@@ -147,7 +147,7 @@ void displayText(String text, int textSize, bool willScroll) {
 }
 
 void setScroll(bool willScroll) {
-    if (willScroll == true) {
+  if (willScroll == true) {
     display.startscrollleft(0x00, 0x0F);
   } else {
     display.stopscroll();
